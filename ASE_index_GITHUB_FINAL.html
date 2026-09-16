@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+
+<meta name="theme-color" content="#17202b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ASE">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22ASE%20-%20Ba%C5%9Fkent%20Freze%20A%C5%9E%22%2C%22short_name%22%3A%22ASE%22%2C%22display%22%3A%22standalone%22%2C%22start_url%22%3A%22.%22%2C%22theme_color%22%3A%22%2317202b%22%2C%22background_color%22%3A%22%23eef2f7%22%7D">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ASE - Başkent Freze AŞ</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef2f7;color:#172033}
+header{background:#17202b;color:#fff;padding:18px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{width:76px;height:76px;border:3px solid #d6a62a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#d6a62a}
+h1{margin:0;font-size:25px}.contact{margin-top:5px;color:#d9e1ea;font-size:14px}
+main{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:1200px;margin:auto}
+.card{background:white;border-radius:18px;padding:16px;box-shadow:0 4px 14px #0001;border-top:7px solid #2878d0}
+.card:nth-child(2){border-color:#c99a18}.card:nth-child(3){border-color:#229b68}.card:nth-child(4){border-color:#c95745}
+h2{font-size:18px;margin:0 0 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:13px;font-weight:700}.field{display:flex;flex-direction:column;gap:5px}
+input,select{width:100%;padding:13px;border:1px solid #cbd3dd;border-radius:11px;font-size:17px;background:#fafcff}
+button{width:100%;margin-top:12px;padding:14px;border:0;border-radius:12px;background:#1769aa;color:#fff;font-size:17px;font-weight:800}
+.card:nth-child(2) button{background:#9b7410}.card:nth-child(3) button{background:#198455}.card:nth-child(4) button{background:#b84332}
+.result{margin-top:12px;background:#f3f6fa;border-radius:12px;padding:12px;line-height:1.7;font-size:15px}
+.result b{font-size:18px}.formula{font-size:12px;color:#657080;margin-top:9px}
+.radio{display:flex;gap:16px;align-items:center;padding:8px 0}.radio label{font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}th,td{padding:6px;border-bottom:1px solid #dde2e8;text-align:center}
+footer{text-align:center;padding:14px;color:#697586;font-size:12px}
+@media(max-width:760px){main{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}header{padding:14px}.logo{width:64px;height:64px}h1{font-size:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BF</div>
+  <div><h1>BAŞKENT FREZE AŞ</h1><div class="contact">0312 395 49 12 · www.baskentfreze.com.tr</div><div class="contact">Dişli Hesaplama Programı · v1.0</div></div>
+</header>
+
+<main>
+<section class="card">
+<h2>⚙️ DÜZ DİŞLİ HESAPLAMA (VK Dahil)</h2>
+<div class="grid">
+<div class="field"><label>Modül (m)</label><input id="d_m" type="number" step="any" value="4"></div>
+<div class="field"><label>Diş sayısı (Z)</label><input id="d_z" type="number" step="1" value="40"></div>
+<div class="field"><label>Kavrama açısı α (°)</label><select id="d_a"><option>10</option><option>15</option><option>17.5</option><option selected>20</option><option>22.5</option><option>25</option><option>30</option></select></div>
+<div class="field"><label>VK diş sayısı (k)</label><input id="d_k" type="number" step="1" value="3"></div>
+</div>
+<button type="button" onclick="straight()">HESAPLA</button>
+<div id="d_out" class="result">Sonuçlar burada görünecek.</div>
+<div class="formula">VK: Wk = m·cos(α)·[π(k−0.5) + Z·inv(α)]</div>
+</section>
+
+<section class="card">
+<h2>⚙️ HELİS DİŞLİ HESAPLAMA (VK Dahil)</h2>
+<div class="grid">
+<div class="field"><label>Normal modül (mn)</label><input id="h_m" type="number" step="any" value="2.5"></div>
+<div class="field"><label>Diş sayısı (Z)</label><input id="h_z" type="number" step="1" value="60"></div>
+<div class="field"><label>Kavrama açısı α (°)</label><select id="h_a"><option>10</option><option>15</option><option>17.5</option><option selected>20</option><option>22.5</option><option>25</option><option>30</option></select></div>
+<div class="field"><label>Helis açısı β (°)</label><input id="h_b" type="number" step="any" value="15"></div>
+<div class="field"><label>VK diş sayısı (k)</label><input id="h_k" type="number" step="1" value="4"></div>
+<div class="field"><label>Helis yönü</label><select id="h_dir"><option>Sağ</option><option>Sol</option></select></div>
+</div>
+<button type="button" onclick="helical()">HESAPLA</button>
+<div id="h_out" class="result">Sonuçlar burada görünecek.</div>
+<div class="formula">d = Z·mn/cosβ · αt = atan(tanα/cosβ) · VK = mn·cosα·[π(k−0.5)+Z·inv(αt)]</div>
+</section>
+
+<section class="card">
+<h2>📐 HELİS DİŞLİ AÇI BULMA (A, B, C, D)</h2>
+<div class="grid">
+<div class="field"><label>A diş sayısı</label><input id="a" type="number" value="40"></div>
+<div class="field"><label>B diş sayısı</label><input id="b" type="number" value="30"></div>
+<div class="field"><label>C diş sayısı</label><input id="c" type="number" value="60"></div>
+<div class="field"><label>D diş sayısı</label><input id="dd" type="number" value="80"></div>
+<div class="field"><label>Modül</label><input id="am" type="number" step="any" value="2.5"></div>
+</div>
+<div class="radio">
+<label><input type="radio" name="sab" value="8.25059" checked> TOS = 8.25059</label>
+<label><input type="radio" name="sab" value="5.96831"> UMU = 5.96831</label>
+</div>
+<button type="button" onclick="angle()">HESAPLA</button>
+<div id="a_out" class="result">Sonuçlar burada görünecek.</div>
+<div class="formula">sin(β) = [((A×C)/(B×D))×Modül] / Sabit · β = arcsin(sinβ)</div>
+</section>
+
+<section class="card">
+<h2>🔧 FELLOW ÇARK HESAPLAMA</h2>
+<div class="grid">
+<div class="field"><label>Modül diş sayısı (M)</label><input id="f_m" type="number" value="40"></div>
+<div class="field"><label>İş diş sayısı (Z)</label><input id="f_z" type="number" value="120"></div>
+</div>
+<button type="button" onclick="fellow()">KOMBİNASYONLARI BUL</button>
+<div id="f_out" class="result">Sonuçlar burada görünecek.</div>
+<div class="formula">Hedef = (5 ÷ 3) × (M ÷ Z) · Çark oranı = (A×C) ÷ (B×D)</div>
+</section>
+</main>
+<div style="max-width:1200px;margin:0 auto 10px;padding:0 14px;"><div style="background:#17202b;color:white;border-radius:12px;padding:10px;text-align:center;font-size:13px">📱 iPhone: Safari’de aç → Paylaş → Ana Ekrana Ekle</div></div><footer>BAŞKENT FREZE AŞ · Doğru Hesap, Güçlü Üretim</footer>
+
+<script>
+const teeth=[32,54,60,100,67,80,90,88,63,66,77,75,97,137,98,79,83,69,68,72,78,70,71,74,53,64,58,38,73,59,62,57,40,76,56,24,22,47,30,50,25,26,36,28,43,42,45,49,27,44,52,41,61,48,113,120];
+
+function inv(deg){let r=deg*Math.PI/180;return Math.tan(r)-r}
+function straight(){
+ let m=+d_m.value,z=+d_z.value,al=+d_a.value,k=+d_k.value;
+ if(m<=0||z<=0||k<=0||k>z)return d_out.innerHTML="⚠️ Değerleri kontrol edin. VK diş sayısı Z'den büyük olamaz.";
+ let d=m*z,da=d+2*m,df=d-2.5*m,w=m*Math.cos(al*Math.PI/180)*(Math.PI*(k-.5)+z*inv(al));
+ d_out.innerHTML=`<div>Dış çap (Da): <b>${da.toFixed(3)} mm</b></div><div>Diş dibi çapı (Df): <b>${df.toFixed(3)} mm</b></div><div>VK (${k} diş): <b>${w.toFixed(3)} mm</b></div>`;
+}
+function helical(){
+ let m=+h_m.value,z=+h_z.value,al=+h_a.value,beta=+h_b.value,k=+h_k.value,x=0;
+ if(m<=0||z<=0||k<=0||k>z)return h_out.innerHTML="⚠️ Değerleri kontrol edin.";
+
+ let ar=al*Math.PI/180;
+ let br=beta*Math.PI/180;
+
+ // Normal basınç açısı -> alın basınç açısı
+ let at=Math.atan(Math.tan(ar)/Math.cos(br));
+
+ // inv(αt) = tan(αt) - αt  (radyan)
+ let invAt=Math.tan(at)-at;
+
+ // Kontrol diş sayısı kullanıcı tarafından seçilir
+ let kk=k;
+
+ // Wk / kontrol ölçüsü
+ let wk=m*Math.cos(ar)*
+   (Math.PI*(kk-0.5)+z*invAt+2*x*Math.tan(ar));
+
+ let d=z*m/Math.cos(br);
+ let da=d+2*m;
+ let df=d-2.5*m;
+
+ h_out.innerHTML=
+  `<b>Bölüm dairesi d:</b> ${d.toFixed(3)} mm<br>
+   <b>Dış çap Da:</b> ${da.toFixed(3)} mm<br>
+   <b>Diş dibi çapı Df:</b> ${df.toFixed(3)} mm<br>
+   <b>Alın basınç açısı αt:</b> ${(at*180/Math.PI).toFixed(3)}°<br>
+   <b>Kontrol diş sayısı k:</b> ${kk}<br>
+   <b>Wk (Kontrol Ölçüsü):</b> ${wk.toFixed(3)} mm`;
+}
+function angle(){
+ let A=+a.value,B=+b.value,C=+c.value,D=+dd.value,m=+am.value,s=+[...document.querySelectorAll('input[name=sab]:checked')][0].value;
+ if(A<=0||B<=0||C<=0||D<=0||m<=0)return a_out.innerHTML="⚠️ Değerleri kontrol edin.";
+ let R=A*C/(B*D),sinb=R*m/s;
+ if(Math.abs(sinb)>1)return a_out.innerHTML=`⚠️ sin(β) = ${sinb.toFixed(6)} → arcsin için geçersiz.`;
+ let beta=Math.asin(sinb)*180/Math.PI;
+ a_out.innerHTML=`<div>Çark oranı R: <b>${R.toFixed(8)}</b></div><div>sin(β): <b>${sinb.toFixed(8)}</b></div><div>Helis açısı β: <b>${beta.toFixed(4)}°</b></div><div>Kullanılan sabit: <b>${s}</b></div>`;
+}
+function fellow(){
+ let M=+f_m.value,Z=+f_z.value;
+ if(M<=0||Z<=0)return f_out.innerHTML="⚠️ Modül diş sayısı ve iş diş sayısını kontrol edin.";
+ let target=5*M/(3*Z), best=[], seen={};
+ function add(x){
+   let key=[x.A,x.B,x.C,x.D].sort((p,q)=>p-q).join('-');
+   if(seen[key])return;
+   seen[key]=1;
+   best.push(x);
+   best.sort((u,v)=>u.score-v.score);
+   if(best.length>5)best.pop();
+ }
+ for(let i=0;i<teeth.length;i++)for(let j=0;j<teeth.length;j++)if(j!==i)
+  for(let k=0;k<teeth.length;k++)if(k!==i&&k!==j)
+   for(let l=0;l<teeth.length;l++)if(l!==i&&l!==j&&l!==k){
+    let ratio=teeth[i]*teeth[k]/(teeth[j]*teeth[l]);
+    let err=Math.abs(ratio-target)/target*100;
+    let spread=(Math.max(teeth[i],teeth[j],teeth[k],teeth[l])-Math.min(teeth[i],teeth[j],teeth[k],teeth[l]))/(teeth[i]+teeth[j]+teeth[k]+teeth[l]);
+    add({A:teeth[i],B:teeth[j],C:teeth[k],D:teeth[l],ratio,err,score:err+spread*.15});
+   }
+ let rows=best.map((x,n)=>`<tr><td>${n+1}</td><td>${x.A}</td><td>${x.B}</td><td>${x.C}</td><td>${x.D}</td><td>${x.ratio.toFixed(8)}</td><td>${x.err.toFixed(4)}%</td></tr>`).join('');
+ f_out.innerHTML=`<div>Hedef oran: <b>${target.toFixed(8)}</b></div><table><tr><th>#</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Oran</th><th>Fark</th></tr>${rows}</table>`;
+}</script>
+</body>
+</html>
