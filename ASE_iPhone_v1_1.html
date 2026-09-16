@@ -108,7 +108,8 @@ function straight(){
  d_out.innerHTML=`<div>Dış çap (Da): <b>${da.toFixed(3)} mm</b></div><div>Diş dibi çapı (Df): <b>${df.toFixed(3)} mm</b></div><div>VK (${k} diş): <b>${w.toFixed(3)} mm</b></div>`;
 }
 function helical(){
- let m=+h_m.value,z=+h_z.value,al=+h_a.value,beta=+h_b.value,k=+h_k.value;
+ let let at=Math.atan(Math.tan(al*Math.PI/180)/Math.cos(br));
+let w=m*Math.cos(al*Math.PI/180)*(Math.PI*(k-.5)+z*(Math.tan(at)-at));
  if(m<=0||z<=0||k<=0||k>z||Math.abs(beta)>=90)return h_out.innerHTML="⚠️ Değerleri kontrol edin.";
  let br=beta*Math.PI/180, d=z*m/Math.cos(br),da=d+2*m,df=d-2.5*m;
  let w=m*Math.cos(al*Math.PI/180)*(Math.PI*(k-.5)+z*inv(al));
