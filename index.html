@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8>
-<link rel="apple-touch-icon" href="ase-icon-180.png">
+<meta charset="utf-8">
+
 <meta name="theme-color" content="#17202b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -63,7 +63,7 @@ footer{text-align:center;padding:14px;color:#697586;font-size:12px}
 </div>
 <button type="button" onclick="helical()">HESAPLA</button>
 <div id="h_out" class="result">Sonuçlar burada görünecek.</div>
-<div class="formula">d = Z·mn/cosβ · Da=d+2mn · Df=d−2.5mn</div>
+<div class="formula">d = Z·mn/cosβ · αt = atan(tanα/cosβ) · VK = mn·cosα·[π(k−0.5)+Z·inv(αt)]</div>
 </section>
 
 <section class="card">
@@ -108,11 +108,36 @@ function straight(){
  d_out.innerHTML=`<div>Dış çap (Da): <b>${da.toFixed(3)} mm</b></div><div>Diş dibi çapı (Df): <b>${df.toFixed(3)} mm</b></div><div>VK (${k} diş): <b>${w.toFixed(3)} mm</b></div>`;
 }
 function helical(){
- let m=+h_m.value,z=+h_z.value,al=+h_a.value,beta=+h_b.value,k=+h_k.value;
- if(m<=0||z<=0||k<=0||k>z||Math.abs(beta)>=90)return h_out.innerHTML="⚠️ Değerleri kontrol edin.";
- let br=beta*Math.PI/180, d=z*m/Math.cos(br),da=d+2*m,df=d-2.5*m;
- let w=m*Math.cos(al*Math.PI/180)*(Math.PI*(k-.5)+z*inv(al));
- h_out.innerHTML=`<div>Helis yönü: <b>${h_dir.value}</b></div><div>Hatve çapı (d): <b>${d.toFixed(3)} mm</b></div><div>Dış çap (Da): <b>${da.toFixed(3)} mm</b></div><div>Diş dibi çapı (Df): <b>${df.toFixed(3)} mm</b></div><div>VK (${k} diş): <b>${w.toFixed(3)} mm</b></div>`;
+ let m=+h_m.value,z=+h_z.value,al=+h_a.value,beta=+h_b.value,k=+h_k.value,x=0;
+ if(m<=0||z<=0||k<=0||k>z)return h_out.innerHTML="⚠️ Değerleri kontrol edin.";
+
+ let ar=al*Math.PI/180;
+ let br=beta*Math.PI/180;
+
+ // Normal basınç açısı -> alın basınç açısı
+ let at=Math.atan(Math.tan(ar)/Math.cos(br));
+
+ // inv(αt) = tan(αt) - αt  (radyan)
+ let invAt=Math.tan(at)-at;
+
+ // Kontrol diş sayısı: en yakın tam sayı
+ let kk=Math.round((z*beta/180)+0.5);
+
+ // Wk / kontrol ölçüsü
+ let wk=m*Math.cos(ar)*
+   (Math.PI*(kk-0.5)+z*invAt+2*x*Math.tan(ar));
+
+ let d=z*m/Math.cos(br);
+ let da=d+2*m;
+ let df=d-2.5*m;
+
+ h_out.innerHTML=
+  `<b>Bölüm dairesi d:</b> ${d.toFixed(3)} mm<br>
+   <b>Dış çap Da:</b> ${da.toFixed(3)} mm<br>
+   <b>Diş dibi çapı Df:</b> ${df.toFixed(3)} mm<br>
+   <b>Alın basınç açısı αt:</b> ${(at*180/Math.PI).toFixed(3)}°<br>
+   <b>Kontrol diş sayısı k:</b> ${kk}<br>
+   <b>Wk (Kontrol Ölçüsü):</b> ${wk.toFixed(3)} mm`;
 }
 function angle(){
  let A=+a.value,B=+b.value,C=+c.value,D=+dd.value,m=+am.value,s=+[...document.querySelectorAll('input[name=sab]:checked')][0].value;
